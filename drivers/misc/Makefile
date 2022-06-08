@@ -78,3 +78,8 @@ obj-$(CONFIG_QTI_XR_SMRTVWR_MISC) += qxr-stdalonevwr.o
 obj-$(CONFIG_FPR_FPC)		+= fpr_FingerprintCard/
 obj-y                           += qrc/
 obj-$(CONFIG_KINECTICS_XR_NORDIC) += kxrctrl/
+
+#ifdef OPLUS_FEATURE_CHG_BASIC
+obj-y				+= motor.o
+obj-y				+= oplus_motor/
+#endif
