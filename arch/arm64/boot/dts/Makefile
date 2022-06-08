@@ -33,13 +33,18 @@ subdir-y += zte
 
 
 else
-    ifeq ($(CONFIG_ARCH_SDM845),y)
-        subdir-y += qcom
-    else ifeq ($(CONFIG_ARCH_SDM670),y)
-        subdir-y += qcom
-    else
-        subdir-y += vendor
-    endif
+
+dts-dirs += 18097
+
+ifeq ($(CONFIG_BRAND_SHOW_FLAG), realme)
+dts-dirs += 19601
+else
+dts-dirs += 18041
+endif
+
+dts-dirs += 19651
+dts-dirs += 18621
+dts-dirs += qcom
 endif
 
 dtb-$(CONFIG_OF_ALL_DTBS) := $(patsubst $(dtstree)/%.dts,%.dtb, $(foreach d,$(subdir), $(wildcard $(dtstree)/$(d)/*.dts)))
