@@ -1,8 +1,3 @@
-/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
-/*
- * Copyright (c) 2016-2019, 2021 The Linux Foundation. All rights reserved.
- */
-
 #ifndef __UAPI_CAM_SENSOR_H__
 #define __UAPI_CAM_SENSOR_H__
 
@@ -30,16 +25,16 @@
  *
  */
 struct  cam_sensor_query_cap {
-	uint32_t        slot_info;
-	uint32_t        secure_camera;
-	uint32_t        pos_pitch;
-	uint32_t        pos_roll;
-	uint32_t        pos_yaw;
-	uint32_t        actuator_slot_id;
-	uint32_t        eeprom_slot_id;
-	uint32_t        ois_slot_id;
-	uint32_t        flash_slot_id;
-	uint32_t        csiphy_slot_id;
+    uint32_t        slot_info;
+    uint32_t        secure_camera;
+    uint32_t        pos_pitch;
+    uint32_t        pos_roll;
+    uint32_t        pos_yaw;
+    uint32_t        actuator_slot_id;
+    uint32_t        eeprom_slot_id;
+    uint32_t        ois_slot_id;
+    uint32_t        flash_slot_id;
+    uint32_t        csiphy_slot_id;
 } __attribute__((packed));
 
 /**
@@ -52,10 +47,10 @@ struct  cam_sensor_query_cap {
  * @reserved
  */
 struct cam_csiphy_query_cap {
-	uint32_t            slot_info;
-	uint32_t            version;
-	uint32_t            clk_lane;
-	uint32_t            reserved;
+    uint32_t            slot_info;
+    uint32_t            version;
+    uint32_t            clk_lane;
+    uint32_t            reserved;
 } __attribute__((packed));
 
 /**
@@ -65,9 +60,23 @@ struct cam_csiphy_query_cap {
  * @reserved
  */
 struct cam_actuator_query_cap {
-	uint32_t            slot_info;
-	uint32_t            reserved;
+    uint32_t            slot_info;
+    uint32_t            reserved;
 } __attribute__((packed));
+
+#ifndef VENDOR_EDIT
+/**
+ * struct cam_actuator_query_cap - capabilities info for actuator
+ *
+ * @slot_info        :  Indicates about the slotId or cell Index
+ * @reserved
+ */
+struct cam_iris_setting {
+    uint32_t            apertureControl;
+    int32_t             get_hall_value;
+    uint32_t            reserved;
+} __attribute__((packed));
+#endif
 
 /**
  * struct cam_eeprom_query_cap_t - capabilities info for eeprom
@@ -76,9 +85,9 @@ struct cam_actuator_query_cap {
  * @eeprom_kernel_probe        :  Indicates about the kernel or userspace probe
  */
 struct cam_eeprom_query_cap_t {
-	uint32_t            slot_info;
-	uint16_t            eeprom_kernel_probe;
-	uint16_t            is_multimodule_mode;
+    uint32_t            slot_info;
+    uint16_t            eeprom_kernel_probe;
+    uint16_t            reserved;
 } __attribute__((packed));
 
 /**
@@ -87,8 +96,8 @@ struct cam_eeprom_query_cap_t {
  * @slot_info                  :  Indicates about the slotId or cell Index
  */
 struct cam_ois_query_cap_t {
-	uint32_t            slot_info;
-	uint16_t            reserved;
+    uint32_t            slot_info;
+    uint16_t            reserved;
 } __attribute__((packed));
 
 /**
@@ -99,10 +108,9 @@ struct cam_ois_query_cap_t {
  * @cmd_type        :    Explains type of command
  */
 struct cam_cmd_i2c_info {
-	uint32_t    slave_addr;
-	uint8_t     i2c_freq_mode;
-	uint8_t     cmd_type;
-	uint16_t    reserved;
+    uint16_t    slave_addr;
+    uint8_t     i2c_freq_mode;
+    uint8_t     cmd_type;
 } __attribute__((packed));
 
 /**
@@ -114,10 +122,10 @@ struct cam_cmd_i2c_info {
  * @memory          :    OIS memory
  */
 struct cam_ois_opcode {
-	uint32_t prog;
-	uint32_t coeff;
-	uint32_t pheripheral;
-	uint32_t memory;
+    uint32_t prog;
+    uint32_t coeff;
+    uint32_t pheripheral;
+    uint32_t memory;
 } __attribute__((packed));
 
 /**
@@ -132,13 +140,13 @@ struct cam_ois_opcode {
  * @opcode                :    opcode
  */
 struct cam_cmd_ois_info {
-	uint32_t              slave_addr;
-	uint8_t               i2c_freq_mode;
-	uint8_t               cmd_type;
-	uint8_t               ois_fw_flag;
-	uint8_t               is_ois_calib;
-	char                  ois_name[MAX_OIS_NAME_SIZE];
-	struct cam_ois_opcode opcode;
+    uint16_t              slave_addr;
+    uint8_t               i2c_freq_mode;
+    uint8_t               cmd_type;
+    uint8_t               ois_fw_flag;
+    uint8_t               is_ois_calib;
+    char                  ois_name[MAX_OIS_NAME_SIZE];
+    struct cam_ois_opcode opcode;
 } __attribute__((packed));
 
 /**
@@ -156,15 +164,15 @@ struct cam_cmd_ois_info {
  * @reserved
  */
 struct cam_cmd_probe {
-	uint8_t     data_type;
-	uint8_t     addr_type;
-	uint8_t     op_code;
-	uint8_t     cmd_type;
-	uint32_t    reg_addr;
-	uint32_t    expected_data;
-	uint32_t    data_mask;
-	uint16_t    camera_id;
-	uint16_t    reserved;
+    uint8_t     data_type;
+    uint8_t     addr_type;
+    uint8_t     op_code;
+    uint8_t     cmd_type;
+    uint32_t    reg_addr;
+    uint32_t    expected_data;
+    uint32_t    data_mask;
+    uint16_t    camera_id;
+    uint16_t    reserved;
 } __attribute__((packed));
 
 /**
@@ -177,10 +185,10 @@ struct cam_cmd_probe {
  *
  */
 struct cam_power_settings {
-	uint16_t    power_seq_type;
-	uint16_t    reserved;
-	uint32_t    config_val_low;
-	uint32_t    config_val_high;
+    uint16_t    power_seq_type;
+    uint16_t    reserved;
+    uint32_t    config_val_low;
+    uint32_t    config_val_high;
 } __attribute__((packed));
 
 /**
@@ -192,11 +200,10 @@ struct cam_power_settings {
  * @power_settings  :    Contains power setting info
  */
 struct cam_cmd_power {
-	uint32_t                    count;
-	uint8_t                     reserved;
-	uint8_t                     cmd_type;
-	uint16_t                    more_reserved;
-	struct cam_power_settings   power_settings[1];
+    uint16_t                    count;
+    uint8_t                     reserved;
+    uint8_t                     cmd_type;
+    struct cam_power_settings   power_settings[1];
 } __attribute__((packed));
 
 /**
@@ -210,11 +217,12 @@ struct cam_cmd_power {
  * @ reserved
  */
 struct i2c_rdwr_header {
-	uint32_t    count;
-	uint8_t     op_code;
-	uint8_t     cmd_type;
-	uint8_t     data_type;
-	uint8_t     addr_type;
+    uint16_t    count;
+    uint8_t     op_code;
+    uint8_t     cmd_type;
+    uint8_t     data_type;
+    uint8_t     addr_type;
+    uint16_t    reserved;
 } __attribute__((packed));
 
 /**
@@ -225,8 +233,8 @@ struct i2c_rdwr_header {
  *
  */
 struct i2c_random_wr_payload {
-	uint32_t     reg_addr;
-	uint32_t     reg_data;
+    uint32_t     reg_addr;
+    uint32_t     reg_data;
 } __attribute__((packed));
 
 /**
@@ -235,8 +243,8 @@ struct i2c_random_wr_payload {
  * @ random_wr_payload :   payload for I2C random write
  */
 struct cam_cmd_i2c_random_wr {
-	struct i2c_rdwr_header       header;
-	struct i2c_random_wr_payload random_wr_payload[1];
+    struct i2c_rdwr_header       header;
+    struct i2c_random_wr_payload random_wr_payload[1];
 } __attribute__((packed));
 
 /**
@@ -245,8 +253,8 @@ struct cam_cmd_i2c_random_wr {
  * @ reserved
  */
 struct cam_cmd_read {
-	uint32_t                reg_data;
-	uint32_t                reserved;
+    uint32_t                reg_data;
+    uint32_t                reserved;
 } __attribute__((packed));
 
 /**
@@ -256,9 +264,9 @@ struct cam_cmd_read {
  * @ data_read       :   I2C read command
  */
 struct cam_cmd_i2c_continuous_wr {
-	struct i2c_rdwr_header  header;
-	uint32_t                reg_addr;
-	struct cam_cmd_read     data_read[1];
+    struct i2c_rdwr_header  header;
+    uint32_t                reg_addr;
+    struct cam_cmd_read     data_read[1];
 } __attribute__((packed));
 
 /**
@@ -267,8 +275,8 @@ struct cam_cmd_i2c_continuous_wr {
  * @ data_read       :   I2C read command
  */
 struct cam_cmd_i2c_random_rd {
-	struct i2c_rdwr_header  header;
-	struct cam_cmd_read     data_read[1];
+    struct i2c_rdwr_header  header;
+    struct cam_cmd_read     data_read[1];
 } __attribute__((packed));
 
 /**
@@ -278,8 +286,8 @@ struct cam_cmd_i2c_random_rd {
  *
  */
 struct cam_cmd_i2c_continuous_rd {
-	struct i2c_rdwr_header  header;
-	uint32_t                reg_addr;
+    struct i2c_rdwr_header  header;
+    uint32_t                reg_addr;
 } __attribute__((packed));
 
 /**
@@ -298,15 +306,15 @@ struct cam_cmd_i2c_continuous_rd {
  *
  */
 struct cam_cmd_conditional_wait {
-	uint8_t     data_type;
-	uint8_t     addr_type;
-	uint16_t    reserved;
-	uint8_t     op_code;
-	uint8_t     cmd_type;
-	uint16_t    timeout;
-	uint32_t    reg_addr;
-	uint32_t    reg_data;
-	uint32_t    data_mask;
+    uint8_t     data_type;
+    uint8_t     addr_type;
+    uint8_t     op_code;
+    uint8_t     cmd_type;
+    uint16_t    timeout;
+    uint16_t    reserved;
+    uint32_t    reg_addr;
+    uint32_t    reg_data;
+    uint32_t    data_mask;
 } __attribute__((packed));
 
 /**
@@ -316,11 +324,9 @@ struct cam_cmd_conditional_wait {
  * @cmd_type        :   Explains type of command
  */
 struct cam_cmd_unconditional_wait {
-	int16_t     delay;
-	int16_t     reserved;
-	uint8_t     op_code;
-	uint8_t     cmd_type;
-	uint16_t    reserved1;
+    int16_t     delay;
+    uint8_t     op_code;
+    uint8_t     cmd_type;
 } __attribute__((packed));
 
 /**
@@ -337,14 +343,14 @@ struct cam_cmd_unconditional_wait {
  *
  */
 struct cam_csiphy_info {
-	uint16_t    lane_mask;
-	uint16_t    lane_assign;
-	uint8_t     csiphy_3phase;
-	uint8_t     combo_mode;
-	uint8_t     lane_cnt;
-	uint8_t     secure_mode;
-	uint64_t    settle_time;
-	uint64_t    data_rate;
+    uint16_t    lane_mask;
+    uint16_t    lane_assign;
+    uint8_t     csiphy_3phase;
+    uint8_t     combo_mode;
+    uint8_t     lane_cnt;
+    uint8_t     secure_mode;
+    uint64_t    settle_time;
+    uint64_t    data_rate;
 } __attribute__((packed));
 
 /**
@@ -355,8 +361,8 @@ struct cam_csiphy_info {
  *
  */
 struct cam_csiphy_acquire_dev_info {
-	uint32_t    combo_mode;
-	uint32_t    reserved;
+    uint32_t    combo_mode;
+    uint32_t    reserved;
 } __attribute__((packed));
 
 /**
@@ -370,11 +376,11 @@ struct cam_csiphy_acquire_dev_info {
  *
  */
 struct cam_sensor_acquire_dev {
-	uint32_t    session_handle;
-	uint32_t    device_handle;
-	uint32_t    handle_type;
-	uint32_t    reserved;
-	uint64_t    info_handle;
+    uint32_t    session_handle;
+    uint32_t    device_handle;
+    uint32_t    handle_type;
+    uint32_t    reserved;
+    uint64_t    info_handle;
 } __attribute__((packed));
 
 /**
@@ -387,11 +393,11 @@ struct cam_sensor_acquire_dev {
  *
  */
 struct cam_sensor_streamon_dev {
-	uint32_t    session_handle;
-	uint32_t    device_handle;
-	uint32_t    handle_type;
-	uint32_t    reserved;
-	uint64_t    info_handle;
+    uint32_t    session_handle;
+    uint32_t    device_handle;
+    uint32_t    handle_type;
+    uint32_t    reserved;
+    uint64_t    info_handle;
 } __attribute__((packed));
 
 /**
@@ -401,10 +407,9 @@ struct cam_sensor_streamon_dev {
  * @cmd_type    :    command buffer type
  */
 struct cam_flash_init {
-	uint32_t    flash_type;
-	uint8_t     reserved;
-	uint8_t     cmd_type;
-	uint16_t    reserved1;
+    uint8_t     flash_type;
+    uint16_t    reserved;
+    uint8_t     cmd_type;
 } __attribute__((packed));
 
 /**
@@ -412,7 +417,7 @@ struct cam_flash_init {
  *
  * @count             :   Number of flash leds
  * @opcode            :   Command buffer opcode
- *			CAM_FLASH_FIRE_RER
+ *        	CAM_FLASH_FIRE_RER
  * @cmd_type          :   command buffer operation type
  * @num_iteration     :   Number of led turn on/off sequence
  * @reserved
@@ -422,13 +427,14 @@ struct cam_flash_init {
  *
  */
 struct cam_flash_set_rer {
-	uint32_t    count;
-	uint8_t     opcode;
-	uint8_t     cmd_type;
-	uint16_t    num_iteration;
-	uint32_t    led_on_delay_ms;
-	uint32_t    led_off_delay_ms;
-	uint32_t    led_current_ma[CAM_FLASH_MAX_LED_TRIGGERS];
+    uint16_t    count;
+    uint8_t     opcode;
+    uint8_t     cmd_type;
+    uint16_t    num_iteration;
+    uint16_t    reserved;
+    uint32_t    led_on_delay_ms;
+    uint32_t    led_off_delay_ms;
+    uint32_t    led_current_ma[CAM_FLASH_MAX_LED_TRIGGERS];
 } __attribute__((packed));
 
 /**
@@ -436,19 +442,18 @@ struct cam_flash_set_rer {
  *
  * @count              :   Number of Flash leds
  * @opcode             :   command buffer opcodes
- *			CAM_FLASH_FIRE_LOW
- *			CAM_FLASH_FIRE_HIGH
- *			CAM_FLASH_OFF
+ *        	CAM_FLASH_FIRE_LOW
+ *        	CAM_FLASH_FIRE_HIGH
+ *        	CAM_FLASH_OFF
  * @cmd_type           :   command buffer operation type
  * @led_current_ma     :   flash led current in ma
  *
  */
 struct cam_flash_set_on_off {
-	uint32_t    count;
-	uint8_t     opcode;
-	uint8_t     cmd_type;
-	uint16_t    reserved;
-	uint32_t    led_current_ma[CAM_FLASH_MAX_LED_TRIGGERS];
+    uint16_t    count;
+    uint8_t     opcode;
+    uint8_t     cmd_type;
+    uint32_t    led_current_ma[CAM_FLASH_MAX_LED_TRIGGERS];
 } __attribute__((packed));
 
 /**
@@ -461,10 +466,10 @@ struct cam_flash_set_on_off {
  *
  */
 struct cam_flash_query_curr {
-	uint16_t    reserved;
-	uint8_t     opcode;
-	uint8_t     cmd_type;
-	uint32_t    query_current_ma;
+    uint16_t    reserved;
+    uint8_t     opcode;
+    uint8_t     cmd_type;
+    uint32_t    query_current_ma;
 } __attribute__ ((packed));
 
 /**
@@ -474,15 +479,59 @@ struct cam_flash_query_curr {
  * @max_current_flash   :  max supported current for flash
  * @max_duration_flash  :  max flash turn on duration
  * @max_current_torch   :  max supported current for torch
- * @flash_type          :  Indicates about the flash type -I2C,GPIO,PMIC
  *
  */
 struct cam_flash_query_cap_info {
-	uint32_t    slot_info;
-	uint32_t    max_current_flash[CAM_FLASH_MAX_LED_TRIGGERS];
-	uint32_t    max_duration_flash[CAM_FLASH_MAX_LED_TRIGGERS];
-	uint32_t    max_current_torch[CAM_FLASH_MAX_LED_TRIGGERS];
-	uint32_t    flash_type;
+    uint32_t    slot_info;
+    uint32_t    max_current_flash[CAM_FLASH_MAX_LED_TRIGGERS];
+    uint32_t    max_duration_flash[CAM_FLASH_MAX_LED_TRIGGERS];
+    uint32_t    max_current_torch[CAM_FLASH_MAX_LED_TRIGGERS];
 } __attribute__ ((packed));
+
+#ifdef VENDOR_EDIT
+#define FD_DFCT_MAX_NUM 5
+#define SG_DFCT_MAX_NUM 299
+
+struct sony_dfct_tbl_t {
+    //---- single static defect ----
+    int sg_dfct_num;    	// the number of single static defect
+    int sg_dfct_addr[SG_DFCT_MAX_NUM];    	// [ u25 ( upper-u13 = x-addr, lower-u12 = y-addr ) ]
+    //---- FD static defect ----
+    int fd_dfct_num;    	// the number of FD static defect
+    int fd_dfct_addr[FD_DFCT_MAX_NUM];    	// [ u25 ( upper-u13 = x-addr, lower-u12 = y-addr ) ]
+} __attribute__ ((packed));
+#endif
+#ifdef VENDOR_EDIT
+#define CALIB_DATA_LENGTH         1561
+#define WRITE_DATA_MAX_LENGTH     8
+#define WRITE_DATA_DELAY          5
+
+struct cam_write_eeprom_t {
+    uint32_t cam_id;
+    uint32_t baseAddr;
+    uint32_t calibDataSize;
+    uint32_t isWRP;
+    uint32_t WRPaddr;
+    unsigned char calibData[CALIB_DATA_LENGTH];
+} __attribute__ ((packed));
+#endif
+
+#ifdef VENDOR_EDIT
+#define EEPROM_SN_SIZE 17
+struct read_eeprom_SN_t{
+    uint32_t cam_id;
+    uint32_t baseAddr;
+    uint32_t SNSize;
+    unsigned char eepromSN[EEPROM_SN_SIZE];
+} __attribute__ ((packed));
+#define EEPROM_CHECK_DATA_MAX_SIZE 196
+struct check_eeprom_data_t{
+    uint32_t cam_id;
+    uint32_t startAddr;
+    uint32_t eepromData_checksum;
+} __attribute__ ((packed));
+
+#endif
+
 
 #endif
