@@ -1,5 +1,13 @@
-/* SPDX-License-Identifier: GPL-2.0-only */
-/* Copyright (c) 2014-2020, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014-2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  */
 #ifndef __WCD_MBHC_V2_H__
 #define __WCD_MBHC_V2_H__
@@ -51,7 +59,7 @@
 #define WCD_MBHC_REG_UPDATE_BITS(function, val)         \
 do {                                                    \
 	if (mbhc->wcd_mbhc_regs[function].reg) {        \
-		snd_soc_component_update_bits(mbhc->component,	\
+		snd_soc_update_bits(mbhc->codec,	\
 		mbhc->wcd_mbhc_regs[function].reg,	\
 		mbhc->wcd_mbhc_regs[function].mask,	\
 		val << (mbhc->wcd_mbhc_regs[function].offset)); \
@@ -61,7 +69,7 @@ do {                                                    \
 #define WCD_MBHC_REG_READ(function, val)	        \
 do {                                                    \
 	if (mbhc->wcd_mbhc_regs[function].reg) {        \
-		val = (((snd_soc_component_read32(mbhc->component,	\
+		val = (((snd_soc_read(mbhc->codec,	\
 		mbhc->wcd_mbhc_regs[function].reg)) &	\
 		(mbhc->wcd_mbhc_regs[function].mask)) >> \
 		(mbhc->wcd_mbhc_regs[function].offset)); \
@@ -123,16 +131,29 @@ do {                                                    \
 
 #define WCD_MBHC_JACK_MASK (SND_JACK_HEADSET | SND_JACK_OC_HPHL | \
 			   SND_JACK_OC_HPHR | SND_JACK_LINEOUT | \
-			   SND_JACK_MECHANICAL | \
+			   SND_JACK_MECHANICAL | SND_JACK_MICROPHONE2 | \
 			   SND_JACK_UNSUPPORTED)
 
 #define WCD_MBHC_JACK_BUTTON_MASK (SND_JACK_BTN_0 | SND_JACK_BTN_1 | \
 				  SND_JACK_BTN_2 | SND_JACK_BTN_3 | \
 				  SND_JACK_BTN_4 | SND_JACK_BTN_5)
 #define OCP_ATTEMPT 20
-#define HS_DETECT_PLUG_TIME_MS (3 * 1000)
+//#ifndef OPLUS_ARCH_EXTENDS
+/*Jianfeng.Qiu@PSW.MM.AudioDriver.HeadsetDet, 2017/04/10,
+ *Modify for headphone detect.
+ */
+//#define HS_DETECT_PLUG_TIME_MS (3 * 1000)
+//#else /* OPLUS_ARCH_EXTENDS */
+#define HS_DETECT_PLUG_TIME_MS (5 * 1000)
+//#endif /* OPLUS_ARCH_EXTENDS */
 #define SPECIAL_HS_DETECT_TIME_MS (2 * 1000)
+#ifndef OPLUS_ARCH_EXTENDS
+/* Erhu.Zhang@PSW.MM.AudioDriver.HeadsetDet, 2020/07/28,
+ * modify hs key blocking to 1s after insterting */
 #define MBHC_BUTTON_PRESS_THRESHOLD_MIN 250
+#else /*OPLUS_ARCH_EXTENDS*/
+#define MBHC_BUTTON_PRESS_THRESHOLD_MIN 1000
+#endif /*OPLUS_ARCH_EXTENDS*/
 #define GND_MIC_SWAP_THRESHOLD 4
 #define GND_MIC_USBC_SWAP_THRESHOLD 2
 #define WCD_FAKE_REMOVAL_MIN_PERIOD_MS 100
@@ -140,9 +161,11 @@ do {                                                    \
 #define FW_READ_ATTEMPTS 15
 #define FW_READ_TIMEOUT 4000000
 #define FAKE_REM_RETRY_ATTEMPTS 3
-#define HPHL_CROSS_CONN_THRESHOLD 100
-#define HPHR_CROSS_CONN_THRESHOLD 100
-
+#define MAX_IMPED 60000
+//#ifdef OPLUS_ARCH_EXTENDS
+/* Huiqun.Han@PSW.MM.AudioDriver.Machine, 2018/06/29, Add for headset detect */
+#define HP_DETECT_WORK_DELAY_MS 400
+//#endif /* OPLUS_ARCH_EXTENDS */
 #define WCD_MBHC_BTN_PRESS_COMPL_TIMEOUT_MS  50
 #define ANC_DETECT_RETRY_CNT 7
 #define WCD_MBHC_SPL_HS_CNT  1
@@ -182,7 +205,6 @@ enum wcd_mbhc_register_function {
 	WCD_MBHC_BTN_DBNC,
 	WCD_MBHC_HS_VREF,
 	WCD_MBHC_HS_COMP_RESULT,
-	WCD_MBHC_IN2P_CLAMP_STATE,
 	WCD_MBHC_MIC_SCHMT_RESULT,
 	WCD_MBHC_HPHL_SCHMT_RESULT,
 	WCD_MBHC_HPHR_SCHMT_RESULT,
@@ -393,22 +415,6 @@ enum mbhc_hs_pullup_iref {
 	I_3P0_UA,
 };
 
-enum mbhc_hs_pullup_iref_v2 {
-	HS_PULLUP_I_DEFAULT = -1,
-	HS_PULLUP_I_3P0_UA = 0,
-	HS_PULLUP_I_2P25_UA,
-	HS_PULLUP_I_1P5_UA,
-	HS_PULLUP_I_0P75_UA,
-	HS_PULLUP_I_1P125_UA = 0x05,
-	HS_PULLUP_I_0P375_UA = 0x07,
-	HS_PULLUP_I_2P0_UA,
-	HS_PULLUP_I_1P0_UA = 0x0A,
-	HS_PULLUP_I_0P5_UA,
-	HS_PULLUP_I_0P25_UA = 0x0F,
-	HS_PULLUP_I_0P125_UA = 0x17,
-	HS_PULLUP_I_OFF,
-};
-
 enum mbhc_moisture_rref {
 	R_OFF,
 	R_24_KOHM,
@@ -421,6 +427,7 @@ struct usbc_ana_audio_config {
 	int usbc_en2_gpio;
 	int usbc_force_gpio;
 	struct device_node *usbc_en1_gpio_p; /* used by pinctrl API */
+	struct device_node *usbc_en2_gpio_p; /* used by pinctrl API */
 	struct device_node *usbc_force_gpio_p; /* used by pinctrl API */
 };
 
@@ -429,7 +436,7 @@ struct wcd_mbhc_config {
 	void *calibration;
 	bool detect_extn_cable;
 	bool mono_stero_detection;
-	bool (*swap_gnd_mic)(struct snd_soc_component *component, bool active);
+	bool (*swap_gnd_mic)(struct snd_soc_codec *codec, bool active);
 	bool hs_ext_micbias;
 	bool gnd_det_en;
 	int key_code[WCD_MBHC_KEYCODE_NUM];
@@ -439,9 +446,6 @@ struct wcd_mbhc_config {
 	int anc_micbias;
 	bool enable_anc_mic_detect;
 	u32 enable_usbc_analog;
-	bool moisture_duty_cycle_en;
-	/* Non-FSA4480 legacy analog audio */
-	bool enable_usbc_analog_legacy;
 	struct usbc_ana_audio_config usbc_analog_cfg;
 };
 
@@ -464,74 +468,55 @@ struct wcd_mbhc_register {
 };
 
 struct wcd_mbhc_cb {
-	void (*update_cross_conn_thr)
-		(struct wcd_mbhc *mbhc);
-	void (*mbhc_surge_ctl)
-		(struct wcd_mbhc *mbhc, bool surge_en);
-	void (*mbhc_comp_autozero_control)
-		(struct wcd_mbhc *mbhc, bool az_enable);
-	void (*get_micbias_val)
-		(struct wcd_mbhc *mbhc, int *mb);
-	void (*bcs_enable)
-		(struct wcd_mbhc *mbhc, bool bcs_enable);
-	int (*enable_mb_source)(struct wcd_mbhc *mbhc, bool turn_on);
-	void (*trim_btn_reg)(struct snd_soc_component *component);
-	void (*compute_impedance)(struct wcd_mbhc *mbhc,
-			uint32_t *zl, uint32_t *zr);
-	void (*set_micbias_value)(struct snd_soc_component *component);
-	void (*set_auto_zeroing)(struct snd_soc_component *component,
-			bool enable);
-	struct firmware_cal * (*get_hwdep_fw_cal)(struct wcd_mbhc *mbhc,
+	int (*enable_mb_source)(struct wcd_mbhc *, bool);
+	void (*trim_btn_reg)(struct snd_soc_codec *);
+	void (*compute_impedance)(struct wcd_mbhc *, uint32_t *, uint32_t *);
+	void (*set_micbias_value)(struct snd_soc_codec *);
+	//#ifdef OPLUS_ARCH_EXTENDS
+	/*Jianfeng.Qiu@PSW.MM.AudioDriver.Codec, 2018/07/31,
+	 *Add for set different micbias voltage.
+	 */
+	void (*set_micbias_value_switch)(struct snd_soc_codec *, u32);
+	//#endif /* OPLUS_ARCH_EXTENDS */
+	void (*set_auto_zeroing)(struct snd_soc_codec *, bool);
+	struct firmware_cal * (*get_hwdep_fw_cal)(struct wcd_mbhc *,
 			enum wcd_cal_type);
-	void (*set_cap_mode)(struct snd_soc_component *component,
-			bool micbias1, bool micbias2);
-	int (*register_notifier)(struct wcd_mbhc *mbhc,
+	void (*set_cap_mode)(struct snd_soc_codec *, bool, bool);
+	int (*register_notifier)(struct wcd_mbhc *,
 				 struct notifier_block *nblock,
 				 bool enable);
-	int (*request_irq)(struct snd_soc_component *component,
-			int irq, irq_handler_t handler,
-			const char *name, void *data);
-	void (*irq_control)(struct snd_soc_component *component,
+	int (*request_irq)(struct snd_soc_codec *,
+			int, irq_handler_t, const char *, void *);
+	void (*irq_control)(struct snd_soc_codec *,
 			int irq, bool enable);
-	int (*free_irq)(struct snd_soc_component *component,
-			int irq, void *data);
-	void (*clk_setup)(struct snd_soc_component *component, bool enable);
-	int (*map_btn_code_to_num)(struct snd_soc_component *component);
-	bool (*lock_sleep)(struct wcd_mbhc *mbhc, bool lock);
-	bool (*micbias_enable_status)(struct wcd_mbhc *mbhc, int micb_num);
-	void (*mbhc_bias)(struct snd_soc_component *component, bool enable);
-	void (*mbhc_common_micb_ctrl)(struct snd_soc_component *component,
-				      int event, bool enable);
-	void (*micb_internal)(struct snd_soc_component *component,
-			int micb_num, bool enable);
-	bool (*hph_pa_on_status)(struct snd_soc_component *component);
-	void (*set_btn_thr)(struct snd_soc_component *component,
-			    s16 *btn_low, s16 *btn_high,
-			    int num_btn, bool is_micbias);
-	void (*hph_pull_up_control)(struct snd_soc_component *component,
+	int (*free_irq)(struct snd_soc_codec *,
+			int irq, void *);
+	void (*clk_setup)(struct snd_soc_codec *, bool);
+	int (*map_btn_code_to_num)(struct snd_soc_codec *);
+	bool (*lock_sleep)(struct wcd_mbhc *, bool);
+	bool (*micbias_enable_status)(struct wcd_mbhc *, int);
+	void (*mbhc_bias)(struct snd_soc_codec *, bool);
+	void (*mbhc_common_micb_ctrl)(struct snd_soc_codec *,
+				      int event, bool);
+	void (*micb_internal)(struct snd_soc_codec *,
+			int micb_num, bool);
+	bool (*hph_pa_on_status)(struct snd_soc_codec *);
+	void (*set_btn_thr)(struct snd_soc_codec *, s16 *, s16 *,
+			    int num_btn, bool);
+	void (*hph_pull_up_control)(struct snd_soc_codec *,
 				    enum mbhc_hs_pullup_iref);
-	int (*mbhc_micbias_control)(struct snd_soc_component *component,
-			int micb_num, int req);
-	void (*mbhc_micb_ramp_control)(struct snd_soc_component *component,
-			bool enable);
-	void (*skip_imped_detect)(struct snd_soc_component *component);
-	bool (*extn_use_mb)(struct snd_soc_component *component);
-	int (*mbhc_micb_ctrl_thr_mic)(struct snd_soc_component *component,
-			int micb_num, bool req_en);
-	void (*mbhc_gnd_det_ctrl)(struct snd_soc_component *component,
-			bool enable);
-	void (*hph_pull_down_ctrl)(struct snd_soc_component *component,
-			bool enable);
-	void (*mbhc_moisture_config)(struct wcd_mbhc *mbhc);
-	bool (*hph_register_recovery)(struct wcd_mbhc *mbhc);
-	void (*update_anc_state)(struct snd_soc_component *component,
-			bool enable, int anc_num);
+	int (*mbhc_micbias_control)(struct snd_soc_codec *, int, int req);
+	void (*mbhc_micb_ramp_control)(struct snd_soc_codec *, bool);
+	void (*skip_imped_detect)(struct snd_soc_codec *);
+	bool (*extn_use_mb)(struct snd_soc_codec *);
+	int (*mbhc_micb_ctrl_thr_mic)(struct snd_soc_codec *, int, bool);
+	void (*mbhc_gnd_det_ctrl)(struct snd_soc_codec *, bool);
+	void (*hph_pull_down_ctrl)(struct snd_soc_codec *, bool);
+	void (*mbhc_moisture_config)(struct wcd_mbhc *);
+	bool (*hph_register_recovery)(struct wcd_mbhc *);
+	void (*update_anc_state)(struct snd_soc_codec *codec,
+				 bool enable, int anc_num);
 	bool (*is_anc_on)(struct wcd_mbhc *mbhc);
-	void (*hph_pull_up_control_v2)(struct snd_soc_component *component,
-			int pull_up_cur);
-	bool (*mbhc_get_moisture_status)(struct wcd_mbhc *mbhc);
-	void (*mbhc_moisture_polling_ctrl)(struct wcd_mbhc *mbhc, bool enable);
-	void (*mbhc_moisture_detect_en)(struct wcd_mbhc *mbhc, bool enable);
 };
 
 struct wcd_mbhc_fn {
@@ -562,13 +547,10 @@ struct wcd_mbhc {
 	bool gnd_swh; /*track GND switch NC / NO */
 	u32 hs_thr;
 	u32 hph_thr;
-	u32 micb_mv;
 	u32 swap_thr;
 	u32 moist_vref;
 	u32 moist_iref;
 	u32 moist_rref;
-	u32 hphl_cross_conn_thr;
-	u32 hphr_cross_conn_thr;
 	u8 micbias1_cap_mode; /* track ext cap setting */
 	u8 micbias2_cap_mode; /* track ext cap setting */
 	bool hs_detect_work_stop;
@@ -580,7 +562,7 @@ struct wcd_mbhc {
 	bool is_btn_already_regd;
 	bool extn_cable_hph_rem;
 
-	struct snd_soc_component *component;
+	struct snd_soc_codec *codec;
 	/* Work to perform MBHC Firmware Read */
 	struct delayed_work mbhc_firmware_dwork;
 	const struct firmware *mbhc_fw;
@@ -608,6 +590,12 @@ struct wcd_mbhc {
 
 	/* Work to correct accessory type */
 	struct work_struct correct_plug_swch;
+	//#ifdef OPLUS_ARCH_EXTENDS
+	/*xiang.fei@PSW.MM.AudioDriver.HeadsetDet, 2017/04/15,
+	 *Add for headset detect.
+	 */
+	struct delayed_work hp_detect_work;
+	//#endif /* OPLUS_ARCH_EXTENDS */
 	struct notifier_block nblock;
 
 	struct wcd_mbhc_register *wcd_mbhc_regs;
@@ -615,7 +603,6 @@ struct wcd_mbhc {
 	struct completion btn_press_compl;
 	struct mutex hphl_pa_lock;
 	struct mutex hphr_pa_lock;
-	bool deinit_in_progress;
 
 	/* Holds mbhc detection method - ADC/Legacy */
 	unsigned int mbhc_detection_logic;
@@ -631,8 +618,6 @@ struct wcd_mbhc {
 
 	struct wcd_mbhc_fn *mbhc_fn;
 	bool force_linein;
-	struct device_node *fsa_np;
-	struct notifier_block fsa_nb;
 };
 
 void wcd_mbhc_find_plug_and_report(struct wcd_mbhc *mbhc,

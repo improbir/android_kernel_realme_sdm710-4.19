@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2018, 2020, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#define CONFIG_PINCTRL_LPI_LEGACY 1
+#define CONFIG_PINCTRL_LPI 1
 #define CONFIG_PINCTRL_WCD 1
 #define CONFIG_AUDIO_EXT_CLK 1
 #define CONFIG_SND_SOC_WCD9XXX_V2 1
@@ -26,7 +26,7 @@
 #define CONFIG_SND_SOC_WCD934X_DSD 1
 #define CONFIG_MSM_QDSP6V2_CODECS 1
 #define CONFIG_MSM_ULTRASOUND 1
-#define CONFIG_MSM_QDSP6_APRV2_RPMSG 1
+#define CONFIG_MSM_QDSP6_APRV2_GLINK 1
 #define CONFIG_MSM_ADSP_LOADER 1
 #define CONFIG_REGMAP_SWR 1
 #define CONFIG_MSM_QDSP6_SSR 1
@@ -34,7 +34,7 @@
 #define CONFIG_MSM_QDSP6_NOTIFIER 1
 #define CONFIG_SND_SOC_MSM_HOSTLESS_PCM 1
 #define CONFIG_SND_SOC_MSM_QDSP6V2_INTF 1
-#define CONFIG_SND_SOC_SDM660 1
+#define CONFIG_SND_SOC_SDM670 1
 #define CONFIG_MSM_GLINK_SPI_XPRT 1
 #define CONFIG_SOUNDWIRE 1
 #define CONFIG_SOUNDWIRE_WCD_CTRL 1
@@ -43,6 +43,7 @@
 #define CONFIG_SND_SOC_QDSP6V2 1
 #define CONFIG_SND_SOC_MSM_QDSP6V2_INTF 1
 #define CONFIG_QTI_PP 1
+#define CONFIG_QTI_PP_AUDIOSPHERE 1
 #define CONFIG_SND_HWDEP_ROUTING 1
 #define CONFIG_DTS_EAGLE 1
 #define CONFIG_DOLBY_DS2 1
@@ -52,7 +53,6 @@
 #define CONFIG_MSM_CDC_PINCTRL 1
 #define CONFIG_SND_SOC_MSM_STUB 1
 #define CONFIG_WCD_DSP_GLINK 1
-#define CONFIG_MSM_AVTIMER 1
 #define CONFIG_SND_SOC_EXT_CODEC 1
 #define CONFIG_SND_SOC_INT_CODEC 1
 #define CONFIG_SND_SOC_CPE 1
@@ -61,4 +61,20 @@
 #define CONFIG_SND_SOC_DIGITAL_CDC 1
 #define CONFIG_SND_SOC_MSM_SDW 1
 #define CONFIG_SND_SOC_MSM_HDMI_CODEC_RX 1
-#define CONFIG_WCD_SPI_DMA_MASKING 1
+
+//ifdef OPLUS_ARCH_EXTENDS
+//Jianfeng.Qiu@PSW.MM.AudioDriver.Codec, 2018/04/20, Add for tfa9894 codec
+#define CONFIG_SND_SOC_TFA98XX 1
+//endif
+
+//#ifdef OPLUS_ARCH_EXTENDS
+/*Jianfeng.Qiu@PSW.MM.AudioDriver.Codec, 2018/04/20, Add for ak43xx codec*/
+#define CONFIG_SND_SOC_AK4376 1
+//#endif
+#ifdef OPLUS_ARCH_EXTENDS
+/*xiang.fei@MULTIMEDIA.AudioDriver.Codec, 2018/10/29, Add for dbmdx*/
+#define CONFIG_SND_SOC_DBMDX 1
+#define CONFIG_SND_SOC_DBMDX_MODULE 1
+#define CONFIG_SND_SOC_DBMDX_SND_CAPTURE 1
+#define CONFIG_SND_SOC_DBMD4_SPI 1
+#endif /* OPLUS_ARCH_EXTENDS */
