@@ -15,9 +15,29 @@
 #ifndef __VENUS_VDEC_H__
 #define __VENUS_VDEC_H__
 
+<<<<<<< HEAD:drivers/media/platform/qcom/venus/vdec.h
 struct venus_inst;
 
 int vdec_ctrl_init(struct venus_inst *inst);
 void vdec_ctrl_deinit(struct venus_inst *inst);
+=======
+/* Disable WLED */
+&pm660l_wled {
+//#ifndef OPLUS_BUG_STABILITY
+//	status = "disabled";
+//#else /* OPLUS_BUG_STABILITY */
+	status = "okay";
+//#endif /* OPLUS_BUG_STABILITY */
+};
+
+/* disable LCDB */
+&pm660l_lcdb {
+//#ifndef OPLUS_BUG_STABILITY
+//	status = "disabled";
+//#else /* OPLUS_BUG_STABILITY */
+	status = "okay";
+//#endif /* OPLUS_BUG_STABILITY */
+};
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom):arch/arm64/boot/dts/qcom/pm660a.dtsi
 
 #endif

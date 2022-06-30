@@ -19,4 +19,14 @@ struct device;
 int venus_boot(struct device *dev, const char *fwname);
 int venus_shutdown(struct device *dev);
 
+<<<<<<< HEAD:drivers/media/platform/qcom/venus/firmware.h
 #endif
+=======
+/ {
+	model = "Qualcomm Technologies, Inc. SDM710 SoC";
+	compatible = "qcom,sdm670";
+	qcom,board-id = <0 0>;
+	/*oppo,prjversion. first one is the count of projects*/
+	oppo,prjversion = <1 19691>;
+};
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom):arch/arm64/boot/dts/qcom/sdm710.dts

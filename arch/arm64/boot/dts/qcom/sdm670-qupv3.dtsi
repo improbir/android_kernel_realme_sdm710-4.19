@@ -157,7 +157,11 @@
 		pinctrl-0 = <&qupv3_se4_i2c_active>;
 		pinctrl-1 = <&qupv3_se4_i2c_sleep>;
 		qcom,wrapper-core = <&qupv3_0>;
-		status = "disabled";
+		/* #ifndef OPLUS_ARCH_EXTENDS */
+		//status = "disabled";
+		/* #else  OPLUS_ARCH_EXTENDS */
+		status = "ok";
+		/* #endif OPLUS_ARCH_EXTENDS */
 	};
 
 	qupv3_se5_i2c: i2c@894000 {
@@ -319,10 +323,18 @@
 		clocks = <&clock_gcc GCC_QUPV3_WRAP0_S4_CLK>,
 			<&clock_gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
 			<&clock_gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
+		/* #ifndef OPLUS_ARCH_EXTENDS */
+		/*
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&qupv3_se4_spi_active>;
 		pinctrl-1 = <&qupv3_se4_spi_sleep>;
+<<<<<<< HEAD
 		interrupts = <GIC_SPI 605 IRQ_TYPE_LEVEL_HIGH>;
+=======
+		*/
+		/* #endif OPLUS_ARCH_EXTENDS */
+		interrupts = <GIC_SPI 605 0>;
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom)
 		spi-max-frequency = <50000000>;
 		qcom,wrapper-core = <&qupv3_0>;
 		dmas = <&gpi_dma0 0 4 1 64 0>,
@@ -555,9 +567,13 @@
 		dmas = <&gpi_dma1 0 4 3 64 0>,
 			<&gpi_dma1 1 4 3 64 0>;
 		dma-names = "tx", "rx";
+		/* #ifndef OPLUS_ARCH_EXTENDS */
+		/*
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&qupv3_se12_i2c_active>;
 		pinctrl-1 = <&qupv3_se12_i2c_sleep>;
+		*/
+		/* #endif OPLUS_ARCH_EXTENDS */
 		qcom,wrapper-core = <&qupv3_1>;
 		status = "disabled";
 	};
@@ -721,10 +737,18 @@
 		clocks = <&clock_gcc GCC_QUPV3_WRAP1_S4_CLK>,
 			<&clock_gcc GCC_QUPV3_WRAP_1_M_AHB_CLK>,
 			<&clock_gcc GCC_QUPV3_WRAP_1_S_AHB_CLK>;
+		/* #ifndef OPLUS_ARCH_EXTENDS */
+		/*
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&qupv3_se12_spi_active>;
 		pinctrl-1 = <&qupv3_se12_spi_sleep>;
+<<<<<<< HEAD
 		interrupts = <GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>;
+=======
+		*/
+		/* #endif OPLUS_ARCH_EXTENDS */
+		interrupts = <GIC_SPI 357 0>;
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom)
 		spi-max-frequency = <50000000>;
 		qcom,wrapper-core = <&qupv3_1>;
 		dmas = <&gpi_dma1 0 4 1 64 0>,

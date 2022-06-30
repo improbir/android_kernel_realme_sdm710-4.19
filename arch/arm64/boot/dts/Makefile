@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SPDX-License-Identifier: GPL-2.0
 dtstree		:= $(srctree)/$(src)
 
@@ -33,6 +34,32 @@ subdir-y += zte
 
 
 else
+=======
+#ifndef VENDOR_EDIT
+#PengNan@BSP.CHG.Basic 2019/03/15 modify for 18097
+#dts-dirs += al
+#dts-dirs += altera
+#dts-dirs += amd
+#dts-dirs += amlogic
+#dts-dirs += apm
+#dts-dirs += arm
+#dts-dirs += broadcom
+#dts-dirs += cavium
+#dts-dirs += exynos
+#dts-dirs += freescale
+#dts-dirs += hisilicon
+#dts-dirs += marvell
+#dts-dirs += mediatek
+#dts-dirs += nvidia
+#dts-dirs += renesas
+#dts-dirs += rockchip
+#dts-dirs += socionext
+#dts-dirs += sprd
+#dts-dirs += xilinx
+#dts-dirs += lg
+#dts-dirs += zte
+#else
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom)
 
 dts-dirs += 18097
 
@@ -45,7 +72,10 @@ endif
 dts-dirs += 19651
 dts-dirs += 18621
 dts-dirs += qcom
+<<<<<<< HEAD
 endif
+=======
+>>>>>>> f1492b3700cb (19691 device tree as dts/qcom)
 
 dtb-$(CONFIG_OF_ALL_DTBS) := $(patsubst $(dtstree)/%.dts,%.dtb, $(foreach d,$(subdir), $(wildcard $(dtstree)/$(d)/*.dts)))
 
