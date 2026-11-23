@@ -7,6 +7,23 @@ mainmenu "Linux/$(ARCH) $(KERNELVERSION) Kernel Configuration"
 
 source "scripts/Kconfig.include"
 
+# Oplus System Kernel Configs
+config OPLUS_SYSTEM_KERNEL_QCOM
+	bool "config oplus system feature "
+	default y
+	help
+		define this config to Distinguish between qcom and mtk platform
+
+config OPLUS_FEATURE_PANIC_FLUSH
+	bool "fsync optimization "
+	default y
+	help
+		define this config to fsync optimization
+
+config SRCARCH
+	string
+	option env="SRCARCH"
+
 source "init/Kconfig"
 
 source "kernel/Kconfig.freezer"
@@ -28,5 +45,3 @@ source "crypto/Kconfig"
 source "lib/Kconfig"
 
 source "lib/Kconfig.debug"
-
-source "techpack/Kconfig"
