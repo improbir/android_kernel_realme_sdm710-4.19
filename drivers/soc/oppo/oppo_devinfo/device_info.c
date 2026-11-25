@@ -15,7 +15,7 @@
 
 #include <linux/module.h>
 #include <linux/proc_fs.h>
-#include <soc/qcom/smem.h>
+#include <linux/soc/qcom/smem.h>
 #include <soc/oppo/device_info.h>
 #include <soc/oplus/system/oppo_project.h>
 #include <linux/slab.h>
@@ -23,7 +23,7 @@
 #include <linux/fs.h>
 #include <linux/of_gpio.h>
 #include <linux/platform_device.h>
-#include <linux/qpnp/qpnp-adc.h>
+#include <linux/qpnp/qpnp-vadc.h>
 #include "../../../fs/proc/internal.h"
 #include <asm/uaccess.h>
 

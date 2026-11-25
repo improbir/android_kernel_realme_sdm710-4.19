@@ -33,6 +33,8 @@
 #include <soc/oppo/boot_mode.h>
 #endif /* OPLUS_FEATURE_CHG_BASIC */
 
+#include <linux/oplus_core.h>
+
 /* UART specific GENI registers */
 #define SE_UART_LOOPBACK_CFG		(0x22C)
 #define SE_UART_TX_TRANS_CFG		(0x25C)

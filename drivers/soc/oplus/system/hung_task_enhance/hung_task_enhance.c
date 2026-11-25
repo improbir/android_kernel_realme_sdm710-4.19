@@ -20,10 +20,8 @@
 #include <trace/events/sched.h>
 #include <linux/sched/sysctl.h>
 #include <linux/version.h>
-#if (LINUX_VERSION_CODE > KERNEL_VERSION(5, 4, 0))
-#include <linux/sched/debug.h>
 #include <linux/sched/signal.h>
-#endif
+#include <linux/sched/clock.h>
 #include <linux/debug_locks.h>
 #include <soc/oplus/system/hung_task_enhance.h>
 #include <soc/oplus/system/oplus_signal.h>
@@ -182,11 +180,7 @@ static void oplus_check_hung_task(struct task_struct *t, unsigned long timeout, 
             BUG();
 
 		t->flags |= PF_OPPO_KILLING;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
-		send_sig_info(SIGKILL, SEND_SIG_PRIV, t);
-#else
-		send_sig_info(SIGKILL, SEND_SIG_FORCED, t);
-#endif
+		force_sig(SIGKILL, t);
 		wake_up_process(t);
 	}
 #endif

@@ -214,6 +214,7 @@ struct dsi_panel {
 	atomic_t esd_recovery_pending;
 
 	bool panel_initialized;
+	bool is_hbm_enabled;
 	bool te_using_watchdog_timer;
 	struct dsi_qsync_capabilities qsync_caps;
 
@@ -310,6 +311,8 @@ int dsi_panel_unprepare(struct dsi_panel *panel);
 int dsi_panel_post_unprepare(struct dsi_panel *panel);
 
 int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl);
+
+int dsi_panel_tx_cmd_set(struct dsi_panel *panel, enum dsi_cmd_set_type type);
 
 int dsi_panel_update_pps(struct dsi_panel *panel);
 

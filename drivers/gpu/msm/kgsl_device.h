@@ -308,6 +308,10 @@ struct kgsl_device {
 
 	struct kobject ppd_kobj;
 
+#ifdef OPLUS_FEATURE_GPU_MINIDUMP
+	u32 snapshotfault;
+#endif
+
 	struct kgsl_pwrscale pwrscale;
 
 	int reset_counter; /* Track how many GPU core resets have occurred */

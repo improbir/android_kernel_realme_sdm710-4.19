@@ -40,6 +40,14 @@ static struct dsi_display_boot_param boot_displays[MAX_DSI_ACTIVE_DISPLAY] = {
 	{.boot_param = dsi_display_secondary},
 };
 
+static struct dsi_display *main_display = NULL;
+
+struct dsi_display *get_main_display(void)
+{
+	return main_display;
+}
+EXPORT_SYMBOL(get_main_display);
+
 static const struct of_device_id dsi_display_dt_match[] = {
 	{.compatible = "qcom,dsi-display"},
 	{}
@@ -246,7 +254,7 @@ error:
 	return rc;
 }
 
-static int dsi_display_cmd_engine_enable(struct dsi_display *display)
+int dsi_display_cmd_engine_enable(struct dsi_display *display)
 {
 	int rc = 0;
 	int i;
@@ -290,7 +298,7 @@ done:
 	return rc;
 }
 
-static int dsi_display_cmd_engine_disable(struct dsi_display *display)
+int dsi_display_cmd_engine_disable(struct dsi_display *display)
 {
 	int rc = 0;
 	int i;
@@ -476,7 +484,7 @@ error:
 }
 
 /* Allocate memory for cmd dma tx buffer */
-static int dsi_host_alloc_cmd_tx_buffer(struct dsi_display *display)
+int dsi_host_alloc_cmd_tx_buffer(struct dsi_display *display)
 {
 	int rc = 0, cnt = 0;
 	struct dsi_display_ctrl *display_ctrl;
@@ -5322,6 +5330,10 @@ static int dsi_display_init(struct dsi_display *display)
 		DSI_ERR("component add failed, rc=%d\n", rc);
 
 	DSI_DEBUG("component add success: %s\n", display->name);
+
+	/* Set main_display for primary display */
+	if (display->display_type && !strcmp(display->display_type, "primary"))
+		main_display = display;
 end:
 	return rc;
 }

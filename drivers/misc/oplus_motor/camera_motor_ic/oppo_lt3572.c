@@ -35,11 +35,11 @@
 #include <linux/of_gpio.h>
 #include <linux/workqueue.h>
 #include <linux/hrtimer.h>
+#include <linux/pwm.h>
 
 #ifdef CONFIG_MTK_PLATFORM
 #include <mt-plat/mtk_pwm.h>
-#elif defined(CONFIG_ARCH_SM8150) || defined(CONFIG_ARCH_SM6150)
-#include <linux/pwm.h>
+#elif defined(CONFIG_ARCH_SM8150) || defined(CONFIG_ARCH_SM6150) || defined(CONFIG_ARCH_SDM670)
 #else
 #include <linux/qpnp/pin.h>
 #include <linux/qpnp/pwm.h>

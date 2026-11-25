@@ -5953,7 +5953,7 @@ static int synaptics_tp_remove(struct i2c_client *client)
         return 0;
 }
 
-static int synaptics_i2c_suspend(struct device *dev)
+__maybe_unused static int synaptics_i2c_suspend(struct device *dev)
 {
         struct touchpanel_data *ts = dev_get_drvdata(dev);
 
@@ -5963,7 +5963,7 @@ static int synaptics_i2c_suspend(struct device *dev)
         return 0;
 }
 
-static int synaptics_i2c_resume(struct device *dev)
+__maybe_unused static int synaptics_i2c_resume(struct device *dev)
 {
         struct touchpanel_data *ts = dev_get_drvdata(dev);
 
@@ -5984,10 +5984,8 @@ static struct of_device_id tp_match_table[] = {
 };
 
 static const struct dev_pm_ops tp_pm_ops = {
-#ifdef CONFIG_FB
         .suspend = synaptics_i2c_suspend,
         .resume = synaptics_i2c_resume,
-#endif
 };
 
 static struct i2c_driver tp_i2c_driver = {

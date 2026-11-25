@@ -664,7 +664,7 @@ static void oppo_motor_awake_init(struct oppo_motor_chip *chip)
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(4, 9, 0))
 	wake_lock_init(&chip->suspend_lock, WAKE_LOCK_SUSPEND, "motor wakelock");
 #else
-	chip->suspend_ws = wakeup_source_register("motor wakelock");
+	chip->suspend_ws = wakeup_source_register(NULL, "motor wakelock");
 #endif
 }
 
@@ -3868,7 +3868,6 @@ static long motor_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 static struct class motor_class = {
 	.name = "motor",
 	.owner = THIS_MODULE,
-	.class_attrs	= motor_class_attrs,
 };
 #endif
 
@@ -4116,10 +4115,8 @@ static int motor_pm_suspend(struct device *dev)
 }
 
 static const struct dev_pm_ops motor_pm_ops = {
-#ifdef CONFIG_FB
 	.suspend = motor_pm_suspend,
 	.resume = motor_pm_resume,
-#endif
 }
 
 MODULE_DEVICE_TABLE(of, of_motor_match);

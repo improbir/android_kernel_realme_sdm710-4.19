@@ -7,6 +7,14 @@
 #include <dsp/apr_audio-v2.h>
 #include <dsp/rtac.h>
 
+/* Forward declarations for structs used in function parameters */
+struct afe_ttp_config;
+struct afe_cps_hw_intf_cfg;
+struct afe_param_id_tdm_lane_cfg;
+struct afe_sp_rx_tmax_xmax_logging_param;
+struct doa_tracking_mon_param;
+struct afe_param_id_clock_set_v2_t;
+
 #define IN			0x000
 #define OUT			0x001
 #define MSM_AFE_MONO        0
@@ -534,7 +542,7 @@ enum {
 };
 
 int afe_set_source_clk(u16 port_id, const char *clk_src);
-void afe_set_clk_src_array(const char *clk_src[CLK_SRC_MAX]);
+void afe_set_clk_src_array(const char *clk_src[MCLK_SRC_MAX]);
 int afe_set_mclk_src_cfg(u16 port_id, uint32_t mclk_src_id, uint32_t mclk_freq);
 
 typedef int (*afe_enable_mclk_and_get_info_cb_func) (void *private_data,

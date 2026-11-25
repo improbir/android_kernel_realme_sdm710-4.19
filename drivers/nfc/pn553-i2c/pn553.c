@@ -75,6 +75,7 @@
 #endif
 
 #include <linux/timer.h>
+#include <linux/sched/signal.h>
 #include "pn553.h"
 
 #include "../oplus_nfc/oplus_nfc.h"
@@ -1184,13 +1185,12 @@ static void secure_timer_workqueue(struct work_struct *Wq)
   return;
 }
 
-static void secure_timer_callback( unsigned long data )
+static void secure_timer_callback(struct timer_list *t)
 {
     /* Flush and push the timer callback event to the bottom half(work queue)
     to be executed later, at a safer time */
     flush_workqueue(pn544_dev->pSecureTimerCbWq);
     queue_work(pn544_dev->pSecureTimerCbWq, &pn544_dev->wq_task);
-    return;
 }
 
 static long start_seccure_timer(unsigned long timer_value)
@@ -1207,8 +1207,7 @@ static long start_seccure_timer(unsigned long timer_value)
     /* Start the timer if timer value is non-zero */
     if(timer_value)
     {
-        init_timer(&secure_timer);
-        setup_timer( &secure_timer, secure_timer_callback, 0 );
+        timer_setup(&secure_timer, secure_timer_callback, 0);
 
         pr_info("start_seccure_timer: timeout %lums (%lu)\n",timer_value, jiffies );
         ret = mod_timer( &secure_timer, jiffies + msecs_to_jiffies(timer_value));

@@ -8244,6 +8244,10 @@ static int hx83112a_nf_i2c_resume(struct device *dev)
     return 0;
 }
 
+/* Forward declarations for PM ops */
+static int hx83112a_nf_i2c_suspend(struct device *dev);
+static int hx83112a_nf_i2c_resume(struct device *dev);
+
 static const struct spi_device_id tp_id[] = {
 #ifdef CONFIG_TOUCHPANEL_MULTI_NOFLASH
     { "oppo,tp_noflash", 0 },
@@ -8263,10 +8267,8 @@ static struct of_device_id tp_match_table[] = {
 };
 
 static const struct dev_pm_ops tp_pm_ops = {
-#ifdef CONFIG_FB
     .suspend = hx83112a_nf_i2c_suspend,
     .resume = hx83112a_nf_i2c_resume,
-#endif
 };
 
 

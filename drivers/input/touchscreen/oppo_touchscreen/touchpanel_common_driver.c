@@ -6985,7 +6985,7 @@ power_control_failed:
  * suspend function bind to LCD on/off status
  * Returning zero(sucess) or negative errno(failed)
  */
-static int tp_suspend(struct device *dev)
+static int __maybe_unused tp_suspend(struct device *dev)
 {
     u64 start_time = 0;
     int ret;
@@ -7124,7 +7124,7 @@ NO_NEED_SUSPEND:
  * resume function bind to LCD on/off status, this fuction start thread to speedup screen on flow.
  * Do not care the result: Return void type
  */
-static void tp_resume(struct device *dev)
+static void __maybe_unused tp_resume(struct device *dev)
 {
     struct touchpanel_data *ts = dev_get_drvdata(dev);
 

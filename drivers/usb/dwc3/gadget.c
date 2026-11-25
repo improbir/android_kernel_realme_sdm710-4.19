@@ -2275,12 +2275,14 @@ done:
 }
 
 #define MIN_RUN_STOP_DELAY_MS 50
+#define DWC3_SOFT_RESET_TIMEOUT 10
 
 static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
 {
 	u32			reg, reg1;
 	u32			timeout = 1500;
 	u32			saved_config = 0;
+	ktime_t			start, diff;
 
 	dbg_event(0xFF, "run_stop", is_on);
 
@@ -2313,7 +2315,6 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
 
 #ifdef VENDOR_EDIT
 	/* Yichun.Chen	PSW.BSP.CHG  2019-08-07  for detect CDP */
-	ktime_t start, diff;
 #endif
 
 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);

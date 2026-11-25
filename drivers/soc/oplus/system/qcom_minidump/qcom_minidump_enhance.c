@@ -28,6 +28,19 @@
 #include <linux/irq.h>
 #include <linux/percpu.h>
 #include <soc/qcom/memory_dump.h>
+
+/* Safe kernel address probe for 4.19 */
+static inline int probe_kernel_address(const void *addr, void *dst, size_t size)
+{
+    mm_segment_t old_fs = get_fs();
+    int ret;
+
+    set_fs(KERNEL_DS);
+    ret = copy_from_user(dst, addr, size);
+    set_fs(old_fs);
+
+    return ret ? -EFAULT : 0;
+}
 #include <linux/version.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
 #include <linux/sched/debug.h>
@@ -157,7 +170,7 @@ void dumpcpuregs(struct pt_regs *pt_regs)
 		cpudata->regs[i][1] = (unsigned int)((addr>>32)&0xffffffff);
 		for(j = 2;j < 256;j++){
 			u32	data;
-			if (probe_kernel_address(p, data)) {
+			if (probe_kernel_address(p, &data, sizeof(data))) {
 				break;
 			}else{
 				cpudata->regs[i][j] = data;
@@ -176,7 +189,7 @@ void dumpcpuregs(struct pt_regs *pt_regs)
 		cpudata->regs[i][1] = (unsigned int)((addr>>32)&0xffffffff);
 		for(j = 2;j < 256;j++){
 			u32	data;
-			if (probe_kernel_address(p, data)) {
+			if (probe_kernel_address(p, &data, sizeof(data))) {
 				break;
 			}else{
 				cpudata->regs[31][j] = data;
@@ -194,7 +207,7 @@ void dumpcpuregs(struct pt_regs *pt_regs)
 		cpudata->sps[1] = (unsigned int)((addr>>32)&0xffffffff);
 		for(j = 2;j < 512;j++){
 			u32	data;
-			if (probe_kernel_address(p, data)) {
+			if (probe_kernel_address(p, &data, sizeof(data))) {
 				break;
 			}else{
 				cpudata->sps[j] = data;

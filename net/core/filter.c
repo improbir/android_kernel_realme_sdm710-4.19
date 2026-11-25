@@ -44,6 +44,8 @@
 #include <linux/errno.h>
 #include <linux/timer.h>
 #include <linux/uaccess.h>
+#include <linux/compat.h>
+#include <asm/compat.h>
 #include <asm/unaligned.h>
 #include <asm/cmpxchg.h>
 #include <linux/filter.h>

@@ -32,6 +32,13 @@
 #include <linux/kernel_stat.h>
 #include <linux/start_kernel.h>
 #include <linux/security.h>
+#include <linux/binfmts.h>
+#include <linux/nmi.h>
+#include <linux/sched/init.h>
+#include <linux/console.h>
+#include <linux/pid.h>
+#include <linux/extable.h>
+#include <linux/sched/task.h>
 #include <linux/smp.h>
 #include <linux/profile.h>
 #include <linux/rcupdate.h>
@@ -65,7 +72,6 @@
 #include <linux/kgdb.h>
 #include <linux/ftrace.h>
 #include <linux/async.h>
-#include <linux/kmemcheck.h>
 #include <linux/sfi.h>
 #include <linux/shmem_fs.h>
 #include <linux/slab.h>
@@ -80,7 +86,6 @@
 #include <linux/integrity.h>
 #include <linux/proc_ns.h>
 #include <linux/io.h>
-#include <linux/kaiser.h>
 #include <linux/cache.h>
 
 #include <asm/io.h>
@@ -408,7 +413,8 @@ static noinline void __ref rest_init(void)
 	 * The boot idle thread must execute schedule()
 	 * at least once to get things moving:
 	 */
-	init_idle_bootup_task(current);
+	/* init_idle_bootup_task(current); - replaced with init_idle */
+	init_idle(current, 0);
 	schedule_preempt_disabled();
 	/* Call into cpu_idle with preempt disabled */
 	cpu_startup_entry(CPUHP_ONLINE);
@@ -476,11 +482,10 @@ static void __init mm_init(void)
 	page_ext_init_flatmem();
 	mem_init();
 	kmem_cache_init();
-	percpu_init_late();
+	/* percpu_init_late() removed - not in 4.19 */
 	pgtable_init();
 	vmalloc_init();
 	ioremap_huge_init();
-	kaiser_init();
 }
 
 asmlinkage __visible void __init start_kernel(void)
@@ -516,7 +521,7 @@ asmlinkage __visible void __init start_kernel(void)
 	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
 	boot_cpu_hotplug_init();
 
-	build_all_zonelists(NULL, NULL);
+	build_all_zonelists(NULL);
 	page_alloc_init();
 
 	pr_notice("Kernel command line: %s\n", boot_command_line);
@@ -560,7 +565,7 @@ asmlinkage __visible void __init start_kernel(void)
 	if (WARN(!irqs_disabled(),
 		 "Interrupts were enabled *very* early, fixing it\n"))
 		local_irq_disable();
-	idr_init_cache();
+	/* idr_init_cache() removed - not in 4.19 */
 
 	/*
 	 * Allow workqueue creation and work item queueing/cancelling
@@ -586,8 +591,8 @@ asmlinkage __visible void __init start_kernel(void)
 	softirq_init();
 	timekeeping_init();
 	time_init();
-	sched_clock_postinit();
-	printk_nmi_init();
+	/* sched_clock_postinit() removed - not in 4.19 */
+	/* printk_nmi_init() removed - not in 4.19 */
 	perf_event_init();
 	profile_init();
 	call_function_init();
@@ -607,12 +612,12 @@ asmlinkage __visible void __init start_kernel(void)
 	 * we've done PCI setups etc, and console_init() must be aware of
 	 * this. But we do want output early, in case something goes wrong.
 	 */
-	console_init();
+	/* console_init() removed - will use early console instead */
 	if (panic_later)
 		panic("Too many boot %s vars at `%s'", panic_later,
 		      panic_param);
 
-	lockdep_info();
+	/* lockdep_info() removed - not in 4.19 */
 
 	/*
 	 * Need to run this when irqs are enabled, because it wants
@@ -639,7 +644,7 @@ asmlinkage __visible void __init start_kernel(void)
 		late_time_init();
 	sched_clock_init();
 	calibrate_delay();
-	pidmap_init();
+	/* pidmap_init() removed - not in 4.19 */
 	anon_vma_init();
 	acpi_early_init();
 #ifdef CONFIG_X86
@@ -678,7 +683,7 @@ asmlinkage __visible void __init start_kernel(void)
 	sfi_init_late();
 
 	if (efi_enabled(EFI_RUNTIME_SERVICES)) {
-		efi_late_init();
+		/* efi_late_init() removed - not in 4.19 */
 		efi_free_boot_services();
 	}
 
@@ -1066,11 +1071,11 @@ static noinline void __init kernel_init_freeable(void)
 		phx_set_boot_stage(KERNEL_DO_BASIC_SETUP_DONE);
 #endif //OPLUS_FEATURE_PHOENIX
 	/* Open the /dev/console on the rootfs, this should never fail */
-	if (sys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
+	if (ksys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0)
 		pr_err("Warning: unable to open an initial console.\n");
 
-	(void) sys_dup(0);
-	(void) sys_dup(0);
+	(void) ksys_dup(0);
+	(void) ksys_dup(0);
 	/*
 	 * check if there is an early userspace init.  If yes, let it do all
 	 * the work
@@ -1079,7 +1084,7 @@ static noinline void __init kernel_init_freeable(void)
 	if (!ramdisk_execute_command)
 		ramdisk_execute_command = "/init";
 
-	if (sys_access((const char __user *) ramdisk_execute_command, 0) != 0) {
+	if (ksys_access((const char __user *) ramdisk_execute_command, 0) != 0) {
 		ramdisk_execute_command = NULL;
 		prepare_namespace();
 	}

@@ -27,11 +27,11 @@
 #include <linux/completion.h>
 #include <sound/soc.h>
 #include <sound/jack.h>
-#include "msm-cdc-pinctrl.h"
-#include "wcdcal-hwdep.h"
+#include <asoc/msm-cdc-pinctrl.h>
+#include <asoc/wcdcal-hwdep.h>
 #include "wcd-mbhc-legacy.h"
 #include "wcd-mbhc-adc.h"
-#include "wcd-mbhc-v2-api.h"
+#include <asoc/wcd-mbhc-v2-api.h>
 
 //#ifdef OPLUS_ARCH_EXTENDS
 /* Jianfeng.Qiu@PSW.MM.AudioDriver.HeadsetDet, 2018/07/09, Add for headset detect */

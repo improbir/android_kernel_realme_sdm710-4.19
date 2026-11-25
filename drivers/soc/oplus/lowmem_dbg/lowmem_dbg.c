@@ -194,21 +194,28 @@ static long get_mem_usage_pages(enum mem_type type)
 		ret = vmalloc_nr_pages();
 		break;
 	case MEM_ION:
+#if 0 /* VENDOR_EDIT - NR_IONCACHE_PAGES not defined in 4.19 */
 #ifdef OPLUS_FEATURE_HEALTHINFO
 		ret = (ion_total() >> PAGE_SHIFT) +
 			global_zone_page_state(NR_IONCACHE_PAGES);
 		break;
 #endif
+#endif /* VENDOR_EDIT */
+	break;
 	case MEM_ION_USED:
+#if 0 /* VENDOR_EDIT - NR_IONCACHE_PAGES not defined in 4.19 */
 #ifdef OPLUS_FEATURE_HEALTHINFO
 		ret = ion_total() >> PAGE_SHIFT;
 #endif
-		break;
+#endif /* VENDOR_EDIT */
+	break;
 	case MEM_ION_CACHE:
+#if 0 /* VENDOR_EDIT - NR_IONCACHE_PAGES not defined in 4.19 */
 #ifdef OPLUS_FEATURE_HEALTHINFO
 		ret = global_zone_page_state(NR_IONCACHE_PAGES);
 #endif
-		break;
+#endif /* VENDOR_EDIT */
+	break;
 	case MEM_GPU:
 #ifdef CONFIG_QCOM_KGSL
 		ret  = atomic_long_read(&kgsl_driver.stats.page_alloc) >> PAGE_SHIFT;
@@ -218,10 +225,12 @@ static long get_mem_usage_pages(enum mem_type type)
 #endif /* CONFIG_QCOM_KGSL */
 		break;
 	case MEM_DT_RESERVED:
+#if 0 /* VENDOR_EDIT - dt_memory_reserved_pages not available in 4.19 */
 #ifdef CONFIG_OF_RESERVED_MEM
 		ret = dt_memory_reserved_pages();
 #endif /* CONFIG_OF_RESERVED_MEM */
-		break;
+#endif /* VENDOR_EDIT */
+	break;
 	case MEM_ITEMS:
 		break;
 	default:
@@ -492,9 +501,14 @@ static int acct_dma_dize(const void *data, struct file *file,
 
 	dbuf = file->private_data;
 	if (dbuf->size && dmainfo->verbose) {
+#if 0 /* VENDOR_EDIT - dma_buf has no buf_name in 4.19 */
 		pr_info("%s:%ldkB\n",
 			dbuf->buf_name,
 			dbuf->size / SZ_1K);
+#else
+		pr_info("dma_buf:%ldkB\n",
+			dbuf->size / SZ_1K);
+#endif /* VENDOR_EDIT */
 	}
 
 	dmainfo->sz += dbuf->size;

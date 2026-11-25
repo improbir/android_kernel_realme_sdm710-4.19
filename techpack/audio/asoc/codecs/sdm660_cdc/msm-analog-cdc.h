@@ -255,7 +255,7 @@ static inline void msm_anlg_cdc_update_int_spk_boost(bool enable)
 }
 static inline void msm_anlg_cdc_spk_ext_pa_cb(
 		int (*codec_spk_ext_pa)(struct snd_soc_component *component,
-		int enable), struct snd_soc_component *codec)
+		int enable), struct snd_soc_component *component)
 {
 
 }

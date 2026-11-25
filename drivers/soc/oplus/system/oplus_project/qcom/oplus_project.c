@@ -21,14 +21,14 @@
 
 #ifdef CONFIG_QCOM_SMEM
 #include <linux/soc/qcom/smem.h>
-#elif CONFIG_MSM_SMEM
+#elif defined(CONFIG_MSM_SMEM)
 #include <soc/qcom/smem.h>
 #endif
 
 #define SMEM_PROJECT    135
 
-#define UINT2Ptr(n)        (uint32_t *)(n)
-#define Ptr2UINT32(p)    (uint32_t)(p)
+#define UINT2Ptr(n)        (uintptr_t *)(n)
+#define Ptr2UINT32(p)    (uintptr_t)(p)
 
 #define PROJECT_VERSION            (0x1)
 #define PCB_VERSION                (0x2)
@@ -99,7 +99,7 @@ static void init_project_version(void)
     /*for qcom's smem*/
 #ifdef CONFIG_QCOM_SMEM
     size_t smem_size;
-#elif CONFIG_MSM_SMEM
+#elif defined(CONFIG_MSM_SMEM)
 	unsigned int  smem_size;
 #endif
     void *smem_addr;
@@ -115,7 +115,7 @@ static void init_project_version(void)
 		smem_addr = qcom_smem_get(QCOM_SMEM_HOST_ANY,
 			SMEM_PROJECT,
 			&smem_size);
-#elif CONFIG_MSM_SMEM
+#elif defined(CONFIG_MSM_SMEM)
 		smem_addr = smem_get_entry(SMEM_PROJECT,
 			&smem_size,
 			0,

@@ -34,6 +34,14 @@
 #include <linux/proc_fs.h>
 #include <linux/mutex.h>
 #endif
+
+/* Forward declaration */
+struct qpnp_pon;
+
+/* External declarations for Oplus PMICWD functions */
+extern void pmicwd_init(struct platform_device *pdev, struct qpnp_pon *pon, bool sys_reset);
+extern void kpdpwr_init(struct qpnp_pon *pon, bool sys_reset);
+extern const struct dev_pm_ops qpnp_pm_ops;
 #endif
 
 #define PMIC_VER_8941				0x01
@@ -273,7 +281,14 @@ struct qpnp_pon {
 	ktime_t			kpdpwr_last_release_time;
 	struct notifier_block	pon_nb;
 	bool			legacy_hard_reset_offset;
+	bool			log_kpd_event;
 };
+
+#ifdef OPLUS_BUG_STABILITY
+extern char pon_reason[];
+extern char poff_reason[];
+extern int preason_initialized;
+#endif /*OPLUS_BUG_STABILITY*/
 
 static int pon_ship_mode_en;
 module_param_named(
@@ -2657,45 +2672,6 @@ static const struct dev_pm_ops qpnp_pm_ops = {
 	.resume = qpnp_resume,
 	.poweroff = qpnp_poweroff,
 };
-#endif
-#endif
-
-#ifdef OPLUS_FEATURE_QCOM_PMICWD
-#ifndef CONFIG_OPLUS_FEATURE_QCOM_PMICWD
-static int pmicwd_init(struct platform_device *pdev, struct qpnp_pon *pon, bool sys_reset)
-{
-	struct proc_dir_entry *entry;
-
-	if (!sys_reset || !pon)
-		return 0;
-
-	/* Initialize PMIC watchdog state */
-	pon->pmicwd_state = OPPO_PMIC_WD_DEFAULT_ENABLE |
-		(OPPO_PMIC_WD_DEFAULT_TIMEOUT << 8) |
-		(OPPO_PMIC_WD_DEFAULT_RST_TYPE << 16);
-
-	mutex_init(&pon->wd_task_mutex);
-
-	/* Create procfs entry for PMIC watchdog */
-	entry = proc_create("pmic_wd", 0664, NULL, &pmicwd_proc_fops);
-	if (!entry) {
-		pr_err("Failed to create pmic_wd proc entry\n");
-		return -ENOMEM;
-	}
-
-	pr_info("PMIC watchdog initialized\n");
-	return 0;
-}
-
-static int kpdpwr_init(struct qpnp_pon *pon, bool sys_reset)
-{
-	if (!sys_reset || !pon)
-		return 0;
-
-	/* Initialize KPDPWR (power key) specific settings */
-	pr_info("KPDPWR initialized\n");
-	return 0;
-}
 #endif
 #endif
 

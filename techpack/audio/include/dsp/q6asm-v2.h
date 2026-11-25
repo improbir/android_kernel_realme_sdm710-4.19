@@ -11,6 +11,9 @@
 #include <linux/list.h>
 #include <linux/msm_ion.h>
 
+/* Forward declarations for structs used in function parameters */
+struct asm_session_mtmx_strtr_param_ttp_offset_t;
+
 #define IN                      0x000
 #define OUT                     0x001
 #define CH_MODE_MONO            0x001

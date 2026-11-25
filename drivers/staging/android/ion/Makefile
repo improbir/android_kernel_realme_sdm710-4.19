@@ -10,6 +10,6 @@ obj-$(CONFIG_ION_LEGACY) += compat_ion.o
 endif
 obj-$(CONFIG_ION_MSM) += msm/
 
-#ifdef VENDOR_EDIT
-obj-y	+= oplus_ion/
-#endif /* VENDOR_EDIT */
+# #ifdef VENDOR_EDIT
+# obj-y	+= oplus_ion/
+# #endif /* VENDOR_EDIT */

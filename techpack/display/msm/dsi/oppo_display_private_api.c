@@ -454,7 +454,7 @@ int dsi_panel_read_panel_reg(struct dsi_display_ctrl *ctrl, struct dsi_panel *pa
 	cmdsreq.msg.flags |= MIPI_DSI_MSG_LASTCOMMAND;
 	flags |= (DSI_CTRL_CMD_FETCH_MEMORY | DSI_CTRL_CMD_READ);
 
-	rc = dsi_ctrl_cmd_transfer(ctrl->ctrl, &cmdsreq.msg, flags);
+	rc = dsi_ctrl_cmd_transfer(ctrl->ctrl, &cmdsreq.msg, &flags);
 	if (rc <= 0) {
 		pr_err("dsi_display_read_panel_reg rx cmd transfer failed rc=%d\n", rc);
 		goto error;
@@ -2488,7 +2488,7 @@ static ssize_t oppo_display_notify_fp_press(struct device *dev,
 
 	err = drm_atomic_commit(state);
 	if (err < 0)
-		drm_atomic_state_free(state);
+		drm_atomic_state_put(state);
 
 	drm_modeset_unlock_all(drm_dev);
 	if (!vblank_get)
